@@ -89,7 +89,9 @@ class AddRoom(Operation):
     def execute(self, hotel: Hotel) -> None:
         if self.number in hotel.rooms:
             raise ValueError("Номер с таким номером уже номер(уже существует).")
-        hotel.rooms[self.number] = Room(self.number, self.capacity, self.price_per_night)
+        hotel.rooms[self.number] = Room(
+            self.number, self.capacity, self.price_per_night
+        )
         self._added = True
 
     def undo(self, hotel: Hotel) -> None:
@@ -113,7 +115,9 @@ class RegisterGuest(Operation):
 
 
 class CreateBooking(Operation):
-    def __init__(self, guest_id: int, room_number: int, check_in_date: date, check_out_date: date) -> None:
+    def __init__(
+        self, guest_id: int, room_number: int, check_in_date: date, check_out_date: date
+    ) -> None:
         self.guest_id = guest_id
         self.room_number = room_number
         self.check_in_date = check_in_date
@@ -152,7 +156,12 @@ class CreateBooking(Operation):
                 continue
             if booking.status in ("cancelled", "checked_out"):
                 continue
-            if self._dates_overlap(self.check_in_date, self.check_out_date, booking.check_in_date, booking.check_out_date):
+            if self._dates_overlap(
+                self.check_in_date,
+                self.check_out_date,
+                booking.check_in_date,
+                booking.check_out_date,
+            ):
                 return False
         return True
 
@@ -254,18 +263,18 @@ if __name__ == "__main__":
     print("Комнаты:", hotel.rooms)
     print("Гости:", hotel.guests)
     print("Бронирования:", hotel.bookings)
-    print(' ')
+    print(" ")
     hotel.apply(CheckIn(booking_id=booking_id))
     print("После заезда:", hotel.bookings[booking_id])
-    print(' ')
+    print(" ")
     hotel.apply(CheckOut(booking_id=booking_id))
     print("После выезда:", hotel.bookings[booking_id])
-    print(' ')
+    print(" ")
     hotel.undo_last()
     print("Отменили последний шаг (выезд):", hotel.bookings[booking_id])
-    print(' ')
+    print(" ")
     hotel.apply(CancelBooking(booking_id=booking_id))
     print("После отмены бронирования:", hotel.bookings[booking_id])
-    print(' ')
+    print(" ")
     hotel.undo_last()
     print("Отменили отмену бронирования:", hotel.bookings[booking_id])
