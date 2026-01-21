@@ -88,7 +88,7 @@ class AddRoom(Operation):
 
     def execute(self, hotel: Hotel) -> None:
         if self.number in hotel.rooms:
-            raise ValueError("Номер с таким номером уже существует.")
+            raise ValueError("Номер с таким номером уже номер(уже существует).")
         hotel.rooms[self.number] = Room(self.number, self.capacity, self.price_per_night)
         self._added = True
 
